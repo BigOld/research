@@ -31,6 +31,7 @@ export default class VueRouter {
     init() {
         this.createRouteMap()
         this.initComponents(_Vue)
+        this.initEvent()
     }
 
     createRouteMap() {
@@ -70,6 +71,12 @@ export default class VueRouter {
                 const component = self.routeMap[self.data.current]
                 return h(component)
             }
+        })
+    }
+
+    initEvent() {
+        window.addEventListener('popstate', () => {
+            this.data.current = window.location.pathname
         })
     }
 }
