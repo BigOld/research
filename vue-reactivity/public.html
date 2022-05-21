@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>发布订阅模式</title>
+    </head>
+    <body>
+        <script>
+            class EventEmitter {
+                constructor () {
+                    this.subs = Object.create(null) // 存储键值对，原型为null，可提升性能
+                }
+
+                $on (eventType, handler) {
+                    this.subs[eventType] = this.subs[eventType] || []
+                    this.subs[eventType].push(handler)
+                }
+
+                $emit (eventType) {
+                    if(this.subs[eventType]){
+                        this.subs[eventType].forEach(handler => {
+                            handler()
+                        })
+                    }
+                }
+            }
+
+            let em = new EventEmitter()
+
+            em.$on('click', () => {
+                console.log('click1');
+            })
+
+            em.$on('click', () => {
+                console.log('click2');
+            })
+
+            em.$emit('click')
+        </script>
+    </body>
+</html>
