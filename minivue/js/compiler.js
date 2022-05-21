@@ -31,15 +31,25 @@ class Compiler {
 
     update (node, key, attrName) {
         let updateFn = this[attrName + 'Updater']
-        updateFn && updateFn(node, this.vm[key])
+        updateFn && updateFn.call(this, node, this.vm[key], key)
     }
 
-    textUpdater (node, value) {
+    textUpdater (node, value, key) {
         node.textContent = value
+        new Watcher(this.vm, key, newValue => {
+            node.textContent = newValue
+        })
     }
 
-    modelUpdater (node, value) {
+    // v-model
+    modelUpdater (node, value, key) {
         node.value = value
+        new Watcher(this.vm, key, newValue => {
+            node.value = newValue
+        })
+        node.addEventListener('input', () => {
+            this.vm[key] = node.value
+        })
     }
  
     compileText (node) {
@@ -49,6 +59,10 @@ class Compiler {
         if(reg.test(value)){
             let key = RegExp.$1.trim()
             node.textContent = value.replace(reg, this.vm[key])
+
+            new Watcher(this.vm, key, newValue => {
+                node.textContent = newValue
+            })
         }
     }
 
