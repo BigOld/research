@@ -26,13 +26,13 @@
     let vm = new Vue({
       el: '#app',
       data: {
-        msg: 'Hello Vue',
+        msg: {},
         count: 100,
         person: { name: 'zs'}
       }
     })
     console.log(vm.msg)
-    // vm.msg = { test: 'Hello' }
+    vm.msg.test = '123'
     // vm.test = 'abc'
   </script>
 </body>
