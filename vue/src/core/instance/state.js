@@ -177,8 +177,10 @@ function initComputed (vm: Component, computed: Object) {
   const watchers = vm._computedWatchers = Object.create(null)
   // computed properties are just getters during SSR
   const isSSR = isServerRendering()
-
+  
+  // 遍历用户定义的计算属性： { a : function() {}, b: {get: ..., set: ... } }
   for (const key in computed) {
+    // 获取计算属性的值
     const userDef = computed[key]
     const getter = typeof userDef === 'function' ? userDef : userDef.get
     if (process.env.NODE_ENV !== 'production' && getter == null) {
@@ -189,6 +191,7 @@ function initComputed (vm: Component, computed: Object) {
     }
 
     if (!isSSR) {
+      // 如果不是服务端渲染环境，创建计算属性对应的Watcher 对象
       // create internal watcher for the computed property.
       watchers[key] = new Watcher(
         vm,
